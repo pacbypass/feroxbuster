@@ -282,7 +282,7 @@ impl Requester {
             // at least once
             atomic_store!(self.policy_triggered, true);
 
-            let new_limit = self.policy_data.get_limit();
+            let new_limit = max(self.policy_data.get_limit(), 1); // minimum of 1 req/s
             self.set_rate_limiter(Some(new_limit)).await?;
             self.ferox_scan
                 .progress_bar()
